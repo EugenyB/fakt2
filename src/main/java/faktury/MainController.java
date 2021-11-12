@@ -1,8 +1,8 @@
 package faktury;
 
-import faktury.db.Artykul;
-import faktury.db.Client;
-import faktury.db.Faktura;
+import faktury.db.entities.Artykul;
+import faktury.db.entities.Client;
+import faktury.db.entities.Faktura;
 import faktury.db.dao.ArtykulDAO;
 import faktury.db.dao.ClientDAO;
 import faktury.db.dao.FakturaDAO;
@@ -14,6 +14,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller Object for Application
+ */
 public class MainController {
 
     @FXML
@@ -31,6 +34,9 @@ public class MainController {
     @FXML
     private ListView<Client> clientListView;
 
+    /**
+     * Initialize JavaFX Application's Controller
+     */
     public void initialize() {
         artykulColumn.setCellValueFactory(new PropertyValueFactory<>("artykulStr"));
         cenaColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -45,18 +51,27 @@ public class MainController {
         });
     }
 
+    /**
+     * Fills Artykul ListView with Artykuls from DB using ArtykulDAO
+     */
     private void fillArtykuls() {
         artykulsListView.setItems(FXCollections.observableList(new ArtykulDAO().findAll()));
     }
 
+    /**
+     * Fills Client ListView with Clients from DB using ClientDAO
+     */
     private void fillClients() {
         List<Client> clients = new ClientDAO().findAll();
         clientListView.setItems(FXCollections.observableList(clients));
     }
 
+    /**
+     * Shows created faktura for chosen client with Alert
+     */
     public void showFaktura() {
         Client client = clientListView.getSelectionModel().getSelectedItem();
-        if (client!=null) {
+        if (client != null) {
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Faktura - " + client.getName() + " - " + client.getNip());
             alert.setHeaderText(null);
@@ -67,6 +82,12 @@ public class MainController {
         }
     }
 
+    /**
+     * Creates faktura's text for method that shows faktura (for Cohesion characteristic)
+     * uses fakturaDAO object for retrieve faktura lines for client (for Coupling)
+     * @param client client object for generate faktura
+     * @return text of faktura for display in Alert or (maybe output to file)
+     */
     private String createFakturaText(Client client) {
         if (client == null) return null;
         List<Faktura> fakturas = new FakturaDAO().findByClient(client);
@@ -75,6 +96,11 @@ public class MainController {
         return s + "\n------------------------\nSum = " + sum;
     }
 
+    /**
+     * Add artykul in client's faktura
+     * Perfoms checks that client and artykul was chosen, number of artykuls is positive
+     * and adds faktura line with FakturaDAO object
+     */
     public void addArtykulToClientFaktura() {
         Client client = clientListView.getSelectionModel().getSelectedItem();
         Artykul artykul = artykulsListView.getSelectionModel().getSelectedItem();
@@ -104,13 +130,34 @@ public class MainController {
         showFakturaList(client);
     }
 
+    /**
+     * Shows lines for client's faktura
+     * @param client chosen client
+     */
     private void showFakturaList(Client client) {
         if (client == null) return;
         List<Faktura> fakturas = new FakturaDAO().findByClient(client);
         fillFakturaTable(fakturas);
     }
 
+    /**
+     * Post fakturas to view in fTable object
+     * @param fakturas lines of faktura
+     */
     private void fillFakturaTable(List<Faktura> fakturas) {
         fTable.setItems(FXCollections.observableList(fakturas));
+    }
+
+    /**
+     * Performs delete for faktura line
+     * finds selected Factura item and deletes it from DB using fakturaDAO object
+     * after that refresh fTable objet in View
+     */
+    public void deleteFakturaForArtykul() {
+        Faktura item = fTable.getSelectionModel().getSelectedItem();
+        if (item == null) return;
+        FakturaDAO fakturaDAO = new FakturaDAO();
+        fakturaDAO.delete(item);
+        fillFakturaTable(fakturaDAO.findByClient(clientListView.getSelectionModel().getSelectedItem()));
     }
 }

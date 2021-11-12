@@ -1,7 +1,6 @@
 package faktury.db.dao;
 
-import faktury.db.Artykul;
-import faktury.db.Client;
+import faktury.db.entities.Artykul;
 import faktury.db.DBConnection;
 
 import java.sql.*;
@@ -9,7 +8,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Performs all DB operations with Artykul Table and creates Artykul Objects by id and All list of Artykuls
+ * Gets connection from DBConnection object (Singleton)
+ */
 public class ArtykulDAO {
+    /**
+     * Gets all artykuls from DB
+     * @return list of all artykuls
+     */
     public List<Artykul> findAll() {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
@@ -28,6 +35,11 @@ public class ArtykulDAO {
         }
     }
 
+    /**
+     * Gets artykul by it's id
+     * @param id id artykul for find
+     * @return found artykul
+     */
     public Artykul find(int id) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();

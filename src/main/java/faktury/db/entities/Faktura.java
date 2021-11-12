@@ -1,4 +1,4 @@
-package faktury.db;
+package faktury.db.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

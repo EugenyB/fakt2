@@ -6,10 +6,24 @@
 <BorderPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="faktury.MainController">
 
    <left>
-      <ListView fx:id="clientListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <ListView fx:id="clientListView" prefHeight="200.0" prefWidth="200.0" />
+         </center>
+         <top>
+            <Label text="Clients" BorderPane.alignment="CENTER" />
+         </top>
+      </BorderPane>
    </left>
    <right>
-      <ListView fx:id="artykulsListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <ListView fx:id="artykulsListView" prefHeight="200.0" prefWidth="200.0" />
+         </center>
+         <top>
+            <Label text="Artykuls" BorderPane.alignment="CENTER" />
+         </top>
+      </BorderPane>
    </right>
    <center>
       <BorderPane BorderPane.alignment="CENTER">
@@ -27,6 +41,7 @@
                  <Label text="Ilosz" />
                  <TextField fx:id="numberField" />
                  <Button mnemonicParsing="false" onAction="#addArtykulToClientFaktura" prefHeight="25.0" prefWidth="56.0" text="Add" />
+               <Button mnemonicParsing="false" onAction="#deleteFakturaForArtykul" text="Delete" />
                  <Button mnemonicParsing="false" onAction="#showFaktura" prefHeight="25.0" prefWidth="65.0" text="Faktura" />
              </ToolBar>
          </bottom>
