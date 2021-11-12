@@ -11,6 +11,10 @@ public class Faktura {
     private Artykul artykul;
     private Client client;
 
+    /**
+     * artykul String property for view
+     * @return title of artykul
+     */
     public String getArtykulStr() {
         return artykul.getTitle();
     }
